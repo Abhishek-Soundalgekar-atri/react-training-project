@@ -9,34 +9,12 @@ import type { ColumnDef } from "@tanstack/react-table";
 import { Link } from "react-router-dom";
 import type { Pizza } from "../types/Pizza";
 
-export default function Home() {
-  const data: Pizza[] = useMemo(
-    () => [
-      {
-        id: 1,
-        name: "Margherita",
-        toppings: ["Cheese"],
-        fanFavorite: true,
-        delivery: true,
-      },
-      {
-        id: 2,
-        name: "Pepperoni",
-        toppings: ["Cheese", "Pepperoni"],
-        fanFavorite: true,
-        delivery: false,
-      },
-      {
-        id: 3,
-        name: "Veggie",
-        toppings: ["Peppers", "Onions", "Olives"],
-        fanFavorite: false,
-        delivery: true,
-      },
-    ],
-    []
-  );
+interface HomeProps {
+  pizzas: Pizza[];
+  deletePizza: (id: number) => void;
+}
 
+export default function Home({ pizzas, deletePizza }: HomeProps) {
   const columns = useMemo<ColumnDef<Pizza>[]>(
     () => [
       {
@@ -68,17 +46,17 @@ export default function Home() {
       {
         header: "Actions",
         cell: ({ row }) => (
-          <button onClick={() => alert(`Delete ${row.original.name}`)}>
+          <button onClick={() => deletePizza(row.original.id)}>
             Delete
           </button>
         ),
       },
     ],
-    []
+    [deletePizza]
   );
 
   const table = useReactTable({
-    data,
+    data: pizzas, // ✅ USE PROP, NOT MOCK DATA
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
