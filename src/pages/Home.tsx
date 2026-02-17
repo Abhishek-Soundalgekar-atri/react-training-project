@@ -80,7 +80,7 @@ export default function Home({ pizzas, deletePizza }: HomeProps) {
 
         <tbody>
           {table.getRowModel().rows.map((row) => (
-            <tr key={row.id}>
+            <tr key={row.id} data-testid="pizza-row">
               {row.getVisibleCells().map((cell) => (
                 <td key={cell.id}>
                   {flexRender(cell.column.columnDef.cell, cell.getContext())}

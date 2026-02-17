@@ -1,21 +1,28 @@
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 
-interface AddPizzaFormData 
-{
-  name: string;
-  toppings: string[];
-  fanFavorite: string;
-  delivery: string;
+interface AddPizzaProps {
+  addPizza: (pizza: {
+    name: string;
+    toppings: string[];
+    fanFavorite: boolean;
+    delivery: boolean;
+  }) => void;
 }
 
-export default function AddPizza() 
+export default function AddPizza({ addPizza }: AddPizzaProps) 
 {
   const { register, handleSubmit } = useForm<AddPizzaFormData>();
   const navigate = useNavigate();
 
   const onSubmit = (data: AddPizzaFormData) => {
     console.log("Form Submitted:", data);
+    addPizza({
+  name: data.name,
+  toppings: data.toppings || [],
+  fanFavorite: data.fanFavorite === "true",
+  delivery: data.delivery === "true",
+});
 
     // temporary redirect
     navigate("/");
@@ -78,7 +85,9 @@ export default function AddPizza()
           </select>
         </div>
 
-        <button type="submit">Add Pizza</button>
+        <button type="submit" data-testid="submit-pizza">
+          Add Pizza
+        </button>
 
       </form>
     </div>
