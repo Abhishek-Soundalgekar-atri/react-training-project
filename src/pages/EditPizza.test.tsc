@@ -1,0 +1,57 @@
+import { render, screen } from "@testing-library/react";
+import userEvent from "@testing-library/user-event";
+import { MemoryRouter, Route, Routes } from "react-router-dom";
+import EditPizza from "./EditPizza";
+import type { Pizza } from "../types/Pizza";
+
+test("allows editing a pizza", async () => {
+  const mockUpdatePizza = vi.fn();
+
+  const mockPizzas: Pizza[] = [
+    {
+      id: 1,
+      name: "Margherita",
+      toppings: ["Cheese"],
+      fanFavorite: true,
+      delivery: true,
+    },
+  ];
+
+  render(
+    <MemoryRouter initialEntries={["/1"]}>
+      <Routes>
+        <Route
+          path="/:pizzaId"
+          element={
+            <EditPizza
+              pizzas={mockPizzas}
+              updatePizza={mockUpdatePizza}
+            />
+          }
+        />
+      </Routes>
+    </MemoryRouter>
+  );
+
+  const user = userEvent.setup();
+
+  const nameInput = screen.getByLabelText(/Pizza Name/i);
+  expect(nameInput).toHaveValue("Margherita");
+
+  await user.clear(nameInput);
+  await user.type(nameInput, "UpdatedPizza");
+
+  await user.click(
+    screen.getByRole("button", { name: /Update Pizza/i })
+  );
+
+  expect(mockUpdatePizza).toHaveBeenCalledTimes(1);
+
+  expect(mockUpdatePizza).toHaveBeenCalledWith({
+    id: 1,
+    name: "UpdatedPizza",
+    toppings: ["Cheese"],
+    fanFavorite: true,
+    delivery: true,
+  });
+});

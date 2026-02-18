@@ -12,9 +12,11 @@ import type { Pizza } from "../types/Pizza";
 interface HomeProps {
   pizzas: Pizza[];
   deletePizza: (id: number) => void;
+  loading: boolean;
+  error: string | null;
 }
 
-export default function Home({ pizzas, deletePizza }: HomeProps) {
+export default function Home({ pizzas, deletePizza, loading, error }: HomeProps) {
   const columns = useMemo<ColumnDef<Pizza>[]>(
     () => [
       {
@@ -60,6 +62,9 @@ export default function Home({ pizzas, deletePizza }: HomeProps) {
     columns,
     getCoreRowModel: getCoreRowModel(),
   });
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>{error}</p>;
 
   return (
     <div style={{ padding: "2rem" }}>

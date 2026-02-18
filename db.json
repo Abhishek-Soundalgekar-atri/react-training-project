@@ -1,0 +1,33 @@
+{
+  "pizzas": [
+    {
+      "id": 1,
+      "name": "Margherita",
+      "toppings": [
+        "Cheese"
+      ],
+      "fanFavorite": true,
+      "delivery": true
+    },
+    {
+      "id": 4,
+      "name": "TestPizza1",
+      "toppings": [
+        "Cheese",
+        "Onions",
+        "Olives"
+      ],
+      "fanFavorite": true,
+      "delivery": true
+    },
+    {
+      "name": "LiveChanges",
+      "toppings": [
+        "Cheese"
+      ],
+      "fanFavorite": true,
+      "delivery": true,
+      "id": 5
+    }
+  ]
+}

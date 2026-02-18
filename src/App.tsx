@@ -6,11 +6,13 @@ import { usePizza } from "./hooks/usePizza";
 
 function App() {
   const {
-    pizzas,
-    addPizza,
-    updatePizza,
-    deletePizza,
-  } = usePizza();
+  pizzas,
+  addPizza,
+  updatePizza,
+  deletePizza,
+  loading,
+  error,
+} = usePizza();
 
   return (
     <BrowserRouter>
@@ -26,7 +28,9 @@ function App() {
             <Home
               pizzas={pizzas}
               deletePizza={deletePizza}
-            />
+              loading={loading}
+              error={error}
+/>
           }
         />
 

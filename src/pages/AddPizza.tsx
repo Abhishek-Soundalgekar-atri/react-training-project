@@ -10,21 +10,25 @@ interface AddPizzaProps {
   }) => void;
 }
 
-export default function AddPizza({ addPizza }: AddPizzaProps) 
-{
+interface AddPizzaFormData {
+  name: string;
+  toppings: string[];
+  fanFavorite: string;
+  delivery: string;
+}
+
+export default function AddPizza({ addPizza }: AddPizzaProps) {
   const { register, handleSubmit } = useForm<AddPizzaFormData>();
   const navigate = useNavigate();
 
   const onSubmit = (data: AddPizzaFormData) => {
-    console.log("Form Submitted:", data);
     addPizza({
-  name: data.name,
-  toppings: data.toppings || [],
-  fanFavorite: data.fanFavorite === "true",
-  delivery: data.delivery === "true",
-});
+      name: data.name,
+      toppings: data.toppings || [],
+      fanFavorite: data.fanFavorite === "true",
+      delivery: data.delivery === "true",
+    });
 
-    // temporary redirect
     navigate("/");
   };
 
@@ -34,52 +38,56 @@ export default function AddPizza({ addPizza }: AddPizzaProps)
 
       <form onSubmit={handleSubmit(onSubmit)}>
 
-        {/* Pizza Name */}
         <div>
-          <label>Pizza Name:</label>
-          <input {...register("name")} required />
+          <label htmlFor="name">Pizza Name:</label>
+          <input
+            id="name"
+            {...register("name")}
+            name="name"
+            required
+          />
         </div>
 
-        {/* Toppings */}
         <div>
           <label>Toppings:</label>
-          <div>
-            <label>
-              <input type="checkbox" value="Cheese" {...register("toppings")} />
-              Cheese
+          {["Cheese", "Pepperoni", "Onions", "Olives"].map((topping) => (
+            <label key={topping}>
+              <input
+                type="checkbox"
+                value={topping}
+                {...register("toppings")}
+                name="toppings"
+              />
+              {topping}
             </label>
-            <label>
-              <input type="checkbox" value="Pepperoni" {...register("toppings")} />
-              Pepperoni
-            </label>
-            <label>
-              <input type="checkbox" value="Onions" {...register("toppings")} />
-              Onions
-            </label>
-            <label>
-              <input type="checkbox" value="Olives" {...register("toppings")} />
-              Olives
-            </label>
-          </div>
+          ))}
         </div>
 
-        {/* Fan Favorite */}
         <div>
           <label>Fan Favorite:</label>
           <label>
-            <input type="radio" value="true" {...register("fanFavorite")} />
+            <input
+              type="radio"
+              value="true"
+              {...register("fanFavorite")}
+              name="fanFavorite"
+            />
             Yes
           </label>
           <label>
-            <input type="radio" value="false" {...register("fanFavorite")} />
+            <input
+              type="radio"
+              value="false"
+              {...register("fanFavorite")}
+              name="fanFavorite"
+            />
             No
           </label>
         </div>
 
-        {/* Delivery */}
         <div>
-          <label>Available for Delivery:</label>
-          <select {...register("delivery")}>
+          <label htmlFor="delivery">Delivery:</label>
+          <select id="delivery" {...register("delivery")} name="delivery">
             <option value="true">Yes</option>
             <option value="false">No</option>
           </select>
