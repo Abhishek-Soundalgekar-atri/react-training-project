@@ -6,9 +6,13 @@ const API_URL = "http://localhost:3001/pizzas";
 
 export function usePizza() {
   const [pizzas, setPizzas] = useState<Pizza[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  // Fetch pizzas on load
   useEffect(() => {
+    fetchPizzas();
+  }, []);
+
   const fetchPizzas = async () => {
     try {
       setLoading(true);
@@ -21,9 +25,6 @@ export function usePizza() {
     }
   };
 
-  fetchPizzas();
-}, []);
-
   const addPizza = async (newPizza: Omit<Pizza, "id">) => {
     const res = await axios.post(API_URL, newPizza);
     setPizzas((prev) => [...prev, res.data]);
@@ -32,26 +33,25 @@ export function usePizza() {
   const updatePizza = async (updatedPizza: Pizza) => {
     await axios.put(`${API_URL}/${updatedPizza.id}`, updatedPizza);
     setPizzas((prev) =>
-      prev.map((pizza) =>
-        pizza.id === updatedPizza.id ? updatedPizza : pizza
+      prev.map((p) =>
+        p.id === updatedPizza.id ? updatedPizza : p
       )
     );
   };
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+
   const deletePizza = async (id: number) => {
     await axios.delete(`${API_URL}/${id}`);
     setPizzas((prev) =>
-      prev.filter((pizza) => pizza.id !== id)
+      prev.filter((p) => p.id !== id)
     );
   };
 
   return {
-  pizzas,
-  addPizza,
-  updatePizza,
-  deletePizza,
-  loading,
-  error
-};
+    pizzas,
+    addPizza,
+    updatePizza,
+    deletePizza,
+    loading,
+    error,
+  };
 }
